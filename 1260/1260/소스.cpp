@@ -1,94 +1,57 @@
 #include<iostream>
 #include<cstdio>
-#include<string.h>
 #include<vector>
+#include<queue>
+#include<utility>
+#include<stack>
 
 #pragma warning(disable:4996)
 
 using namespace std;
 
-int **node;
+int n, m, v;
+int n1, n2, cur;
+queue<int> q;
+stack<int> s;
+bool s_visit[1001] = { false };
+bool q_visit[1001] = { false };
+int arr[1001][1001] = { 0 };
 
-class queue {
-private:
-	vector<int> q;
-	vector<int>::iterator iter;
-public:
-	void push(int n) {
-		q.push_back(n);
-	}
-
-	int pop() {
-		int returnNum;
-		iter = q.begin();
-		returnNum = q.at(0);
-		q.erase(iter);
-		return returnNum;
-	}
-
-	int pop_back() {
-		int size = q.size();
-		int returnNum;
-		for (iter = q.begin(); iter < q.end(); iter++);
-		returnNum = q.at(q.size() - 1);
-		q.erase(iter);
-		return returnNum;
-	}
-
-	int front() {
-		return q.at(0);
-	}
-};
-
-void dfs(int *done, int n, int  v) {
-	int k = v;
-	cout << k + 1 << " ";
-	for (int j = 0; j < n; j++) {
-		if ((node[k][j]) && done[j]) {
-			done[j] = 0;
-			dfs(done, n, j);
+void dfs(int a) {
+	if (s_visit[a])
+		return;
+	s_visit[a] = true;
+	printf("%d ", a);
+	for (int i = 0; i <= n; i++) {
+		if (arr[a][i]) {
+			if (!s_visit[i])
+				dfs(i);
 		}
 	}
 }
 
 int main() {
-	queue q;
-	int n, m, v, x, y, k;
-	int *done;
 	cin >> n >> m >> v;
-	node = new int*[n];
-	done = new int[n];
-	for (int i = 0; i < n; i++) {
-		node[i] = new int[n];
-		done[i] = 1;
-	}
-	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < n; j++) {
-			node[i][j] = 0;
-		}
-	}
 	for (int i = 0; i < m; i++) {
-		cin >> x >> y;
-		node[x - 1][y - 1] = 1;
-		node[y - 1][x - 1] = 1;
+		scanf("%d %d", &n1, &n2);
+		arr[n1][n2] = arr[n2][n1] = 1;
 	}
-	done[v - 1] = 0;
-	dfs(done, n, v - 1);
+	dfs(v);
 	cout << endl;
-	for (int i = 0; i < n; i++) {
-		done[i] = 1;
-	}
-	q.push(v - 1);
-	done[v - 1] = 0;
-	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < n; j++) {
-			if ((node[q.front()][j]) && done[j]) {
-				done[j] = 0;
-				q.push(j);
+	q.push(v);
+	q_visit[v] = true;
+	while (!q.empty()) {
+		cur = q.front();
+		printf("%d ", cur);
+		q.pop();
+		for (int i = 1; i <= n; i++) {
+			if (arr[cur][i]) {
+				if (!q_visit[i]) {
+					q.push(i);
+					q_visit[i] = true;
+				}
 			}
 		}
-		cout << q.pop() + 1 << " ";
 	}
 	cout << endl;
-	return 0;
 }
