@@ -10,10 +10,10 @@ using namespace std;
 
 int main() {
 	int n;
-	int arr[3] = { 1, 2,  };
+	int arr[3] = { 1, 2, };
 	cin >> n;
 	for (int i = 2; i < n; i++) {
-		arr[2] = (arr[0]%MOD + arr[1]%MOD)%MOD;
+		arr[2] = (arr[0] % MOD + arr[1] % MOD) % MOD;
 		arr[0] = arr[1];
 		arr[1] = arr[2];
 	}
