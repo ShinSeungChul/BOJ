@@ -6,24 +6,30 @@
 
 using namespace std;
 
-#define MOD 15746
-
 int main() {
 	int n;
-	int arr[3] = { 1, 2, };
-	cin >> n;
-	for (int i = 2; i < n; i++) {
-		arr[2] = (arr[0] % MOD + arr[1] % MOD) % MOD;
-		arr[0] = arr[1];
-		arr[1] = arr[2];
+	int m;
+	int sum;
+	int temp = 1;
+	int mul = 1;
+	int fix;
+	cin >> n >> m;
+	for (int i = 0; i < m; i++) {
+		scanf("%d", &fix);
+		sum = 0;
+		for (int j = temp; j < fix; j++) {
+			sum++;
+		}
+		temp = fix + 1;
+		if(sum)
+			mul *= sum;
 	}
-	if (n == 1) {
-		cout << 1 << endl;
+	sum = 0;
+	for (int j = temp; j < n + 1; j++) {
+		sum++;
 	}
-	else if (n == 2) {
-		cout << 2 << endl;
-	}
-	else {
-		cout << arr[2] << endl;
-	}
+	temp = fix + 1;
+	if(sum)
+		mul *= sum;
+	cout << mul << endl;
 }
