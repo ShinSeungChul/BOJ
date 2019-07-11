@@ -9,59 +9,41 @@
 
 using namespace std;
 
-#define MOD 1000000007
-
 int main() {
-	int n;
-	cin >> n;
-	long long ans = 1;
-	long long temp = 1;
-	long long strn = 0, strc = 0, strcn = 0;
-	char s[11];
-	bool haven = false, havec = false;
-	for (int i = 0; i < n; i++) {
-		temp = ((temp%MOD)* (n - i)) % MOD;
-		ans = ((ans%MOD) + (temp%MOD)) % MOD;
-	}
-	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < 10; j++) {
-			s[j] = ' ';
+	long long n, m;
+	cin >> n >> m;
+	vector<long long> v1;
+	vector<long long> v2;
+	long long before, cur;
+	cin >> before;
+	long long a = 0, b = 0;
+	for (int i = 1; i < n; i++) {
+		scanf("%lld", &cur);
+		if (before == cur) {
+			v1.push_back(0);
+			v2.push_back(0);
 		}
-		scanf("%s", s);
-		haven = false, havec = false;
-		for (int j = 0; j < 10; j++) {
-			if (s[j] == 'N') {
-				haven = true;
-			}
-			else if (s[j] == 'C') {
-				havec = true;
-				if (haven) {
-					break;
-				}
-			}
-			if (j == 9) {
-				if ((haven) && (havec))
-					strcn++;
-				else if (haven)
-					strn++;
-				else
-					strc++;
-			}
+		else if (before > cur) {
+			v1.push_back(m - before + cur);
+			a += (m - before + cur);
+			v2.push_back(before - cur);
+		}
+		else if (before < cur) {
+			v1.push_back(cur - before);
+			a += (cur - before);
+			v2.push_back(m - cur + before);
+		}
+		before = cur;
+	}
+	long long ans = a;
+	long long button = 0;
+	for (int i = 0; i < n - 1; i++) {
+		a -= v1[i];
+		b += v2[i];
+		if (ans > max(a, b)) {
+			ans = max(a, b);
+			button = i + 1;
 		}
 	}
-	long long temp1 = 0, temp2 = 0;
-	temp = 1;
-	for (int i = 0; i < strn; i++) {
-		temp = ((temp%MOD)* (strn - i)) % MOD;
-		temp1 = ((temp1%MOD) + temp) % MOD;
-	}
-	temp = 1;
-	for (int i = 0; i < strc; i++) {
-		temp = ((temp%MOD)* (strc - i)) % MOD;
-		temp2 = ((temp2%MOD) + temp) % MOD;
-	}
-	ans = ans - ((((temp1 + 1)*(temp2 + 1)) % MOD*(strcn + 1)) % MOD);
-	if (ans < 0)
-		ans += MOD;
-	cout << ans << endl;
+	cout << button + 1 << endl << ans << endl;
 }
